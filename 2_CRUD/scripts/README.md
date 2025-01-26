@@ -56,7 +56,25 @@ db.movies.aggregate([
 ```
 
 Q7. Display avg number of awards won, in each movie category.
-TODO
+```
+db.aggregate(
+[
+  {
+    $unwind: "$genres"
+  },
+  {
+    $group: {
+      _id: "$genres", 
+      avgAwardsWon : { $avg: "$awards.wins"}
+    }
+  },
+  {
+    $addFields: {
+      avgAwardsRounded: { $round: ["$avgAwardsWon", 0] }
+    }
+  }
+])
+```
 
 Q8. Display 5 latest comments
 `db.comments.find().sort( { date: -1} ).limit(5)`
